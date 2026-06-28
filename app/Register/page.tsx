@@ -4,7 +4,16 @@ import { useState } from "react";
 
 export default function RegisterPage() {
   const [teamName, setTeamName] = useState("");
+  const [leaderName, setLeaderName] = useState("");
+  
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
 
+    console.log("Team Name:", teamName);
+    console.log("Leader Name:", leaderName);
+
+    alert(`Team ${teamName} registered successfully!`);
+  }
   return (
     <main className="min-h-screen bg-[#050816] text-white px-6 py-16">
       <div className="mx-auto max-w-2xl">
@@ -38,6 +47,8 @@ export default function RegisterPage() {
 
             <input
               type="text"
+              value={leaderName}
+              onChange={(e) => setLeaderName(e.target.value)}
               className="w-full rounded-lg border border-white/10 bg-[#0B1120] p-3 outline-none focus:border-cyan-400"
             />
           </div>
@@ -86,9 +97,20 @@ export default function RegisterPage() {
             />
           </div>
 
-          <p className="text-cyan-400">
-            Team N Preview: {teamName}
-          </p>
+          <div className="rounded-lg border border-cyan-400/30 bg-cyan-400/10 p-4">
+            <h3 className="mb-2 text-lg font-semibold text-cyan-400">
+              Team Preview
+            </h3>
+
+            <p>
+              <span className="font-semibold">Team:</span> {teamName || "Not entered"}
+            </p>
+
+            <p>
+              <span className="font-semibold">Leader:</span> {leaderName || "Not entered"}
+            </p>
+
+          </div>
 
           <button
             type="submit"
