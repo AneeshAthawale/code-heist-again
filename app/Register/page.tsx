@@ -5,9 +5,19 @@ import { useState } from "react";
 export default function RegisterPage() {
   const [teamName, setTeamName] = useState("");
   const [leaderName, setLeaderName] = useState("");
-  
-  function handleSubmit(e: React.FormEvent) {
+
+  function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
+
+    if (!teamName.trim()) {
+      alert("Please enter a team name.");
+      return;
+    }
+
+    if (!leaderName.trim()) {
+      alert("Please enter the team leader's name.");
+      return;
+    }
 
     console.log("Team Name:", teamName);
     console.log("Leader Name:", leaderName);
@@ -26,7 +36,10 @@ export default function RegisterPage() {
           Create your team and secure your spot in the contest.
         </p>
 
-        <form className="space-y-6 rounded-2xl border border-white/10 bg-white/5 p-8">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6 rounded-2xl border border-white/10 bg-white/5 p-8"
+        >
           <div>
             <label className="mb-2 block text-sm text-gray-300">
               Team Name
