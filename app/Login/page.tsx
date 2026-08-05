@@ -12,7 +12,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     if (teamName === "admin" && password === "codeheist2026") {
-      router.push("/components/admin");
+      router.push("/admin");
       return;
     }
 

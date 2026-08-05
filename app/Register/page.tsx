@@ -1,29 +1,50 @@
 "use client";
 
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function RegisterPage() {
   const [teamName, setTeamName] = useState("");
   const [leaderName, setLeaderName] = useState("");
+  const [password, setPassword] = useState("");
+  const [member2, setMember2] = useState("");
+  const [member3, setMember3] = useState("");
+  const [member4, setMember4] = useState("");
 
-  function handleSubmit(e: React.SyntheticEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!teamName.trim()) {
-      alert("Please enter a team name.");
+    if (!teamName.trim() || !leaderName.trim() || !password.trim()) {
+      alert("Please fill all required fields.");
       return;
     }
 
-    if (!leaderName.trim()) {
-      alert("Please enter the team leader's name.");
+    const { error } = await supabase.from("teams").insert([
+      {
+        team_name: teamName,
+        leader_name: leaderName,
+        password: password,
+        member2: member2,
+        member3: member3,
+        member4: member4,
+      },
+    ]);
+
+    if (error) {
+      alert(error.message);
       return;
     }
 
-    console.log("Team Name:", teamName);
-    console.log("Leader Name:", leaderName);
+    alert("Team registered successfully!");
 
-    alert(`Team ${teamName} registered successfully!`);
+    setTeamName("");
+    setLeaderName("");
+    setPassword("");
+    setMember2("");
+    setMember3("");
+    setMember4("");
   }
+
   return (
     <main className="min-h-screen bg-[#050816] text-white px-6 py-16">
       <div className="mx-auto max-w-2xl">
@@ -32,102 +53,61 @@ export default function RegisterPage() {
           <span className="text-cyan-400"> Code Heist</span>
         </h1>
 
-        <p className="mb-10 text-gray-400">
-          Create your team and secure your spot in the contest.
-        </p>
-
         <form
           onSubmit={handleSubmit}
           className="space-y-6 rounded-2xl border border-white/10 bg-white/5 p-8"
         >
-          <div>
-            <label className="mb-2 block text-sm text-gray-300">
-              Team Name
-            </label>
+          <input
+            type="text"
+            placeholder="Team Name"
+            value={teamName}
+            onChange={(e) => setTeamName(e.target.value)}
+            className="w-full rounded-lg bg-[#0B1120] p-3"
+          />
 
-            <input
-              type="text"
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-[#0B1120] p-3 outline-none focus:border-cyan-400"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Leader Name"
+            value={leaderName}
+            onChange={(e) => setLeaderName(e.target.value)}
+            className="w-full rounded-lg bg-[#0B1120] p-3"
+          />
 
-          <div>
-            <label className="mb-2 block text-sm text-gray-300">
-              Team Leader Name
-            </label>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded-lg bg-[#0B1120] p-3"
+          />
 
-            <input
-              type="text"
-              value={leaderName}
-              onChange={(e) => setLeaderName(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-[#0B1120] p-3 outline-none focus:border-cyan-400"
-            />
-          </div>
+          <input
+            type="text"
+            placeholder="Member 2"
+            value={member2}
+            onChange={(e) => setMember2(e.target.value)}
+            className="w-full rounded-lg bg-[#0B1120] p-3"
+          />
 
-          <div>
-            <label className="mb-2 block text-sm text-gray-300">
-              Team Password
-            </label>
+          <input
+            type="text"
+            placeholder="Member 3"
+            value={member3}
+            onChange={(e) => setMember3(e.target.value)}
+            className="w-full rounded-lg bg-[#0B1120] p-3"
+          />
 
-            <input
-              type="password"
-              className="w-full rounded-lg border border-white/10 bg-[#0B1120] p-3 outline-none focus:border-cyan-400"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm text-gray-300">
-              Member 2
-            </label>
-
-            <input
-              type="text"
-              className="w-full rounded-lg border border-white/10 bg-[#0B1120] p-3 outline-none focus:border-cyan-400"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm text-gray-300">
-              Member 3
-            </label>
-
-            <input
-              type="text"
-              className="w-full rounded-lg border border-white/10 bg-[#0B1120] p-3 outline-none focus:border-cyan-400"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm text-gray-300">
-              Member 4
-            </label>
-
-            <input
-              type="text"
-              className="w-full rounded-lg border border-white/10 bg-[#0B1120] p-3 outline-none focus:border-cyan-400"
-            />
-          </div>
-
-          <div className="rounded-lg border border-cyan-400/30 bg-cyan-400/10 p-4">
-            <h3 className="mb-2 text-lg font-semibold text-cyan-400">
-              Team Preview
-            </h3>
-
-            <p>
-              <span className="font-semibold">Team:</span> {teamName || "Not entered"}
-            </p>
-
-            <p>
-              <span className="font-semibold">Leader:</span> {leaderName || "Not entered"}
-            </p>
-
-          </div>
+          <input
+            type="text"
+            placeholder="Member 4"
+            value={member4}
+            onChange={(e) => setMember4(e.target.value)}
+            className="w-full rounded-lg bg-[#0B1120] p-3"
+          />
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-cyan-500 py-3 font-semibold text-black transition hover:bg-cyan-400"
+            className="w-full rounded-lg bg-cyan-500 py-3 font-semibold text-black"
           >
             Register Team
           </button>

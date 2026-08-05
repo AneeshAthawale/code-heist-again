@@ -5,19 +5,15 @@ import type { Question } from "@/app/types/question";
 
 interface Props {
   questions: Question[];
-  onDelete: () => void;
+  onQuestionDeleted: () => void;
 }
 
 export default function QuestionTable({
   questions,
-  onDelete,
+  onQuestionDeleted,
 }: Props) {
   async function deleteQuestion(id: number) {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this question?"
-    );
-
-    if (!confirmDelete) return;
+    if (!confirm("Delete this question?")) return;
 
     const { error } = await supabase
       .from("questions")
@@ -29,8 +25,7 @@ export default function QuestionTable({
       return;
     }
 
-    alert("Question deleted successfully!");
-    onDelete();
+    onQuestionDeleted();
   }
 
   return (
@@ -48,10 +43,7 @@ export default function QuestionTable({
 
         <tbody>
           {questions.map((question) => (
-            <tr
-              key={question.id}
-              className="border-t border-white/10"
-            >
+            <tr key={question.id} className="border-t border-white/10">
               <td className="p-4">{question.title}</td>
               <td className="p-4">{question.round}</td>
               <td className="p-4">{question.difficulty}</td>
@@ -60,7 +52,7 @@ export default function QuestionTable({
               <td className="p-4">
                 <button
                   onClick={() => deleteQuestion(question.id)}
-                  className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
+                  className="rounded bg-red-600 px-3 py-1 hover:bg-red-500"
                 >
                   Delete
                 </button>

@@ -42,7 +42,7 @@ export default function QuestionsPage() {
       ) : (
         <QuestionTable
           questions={questions}
-          onDelete={fetchQuestions}
+          onQuestionDeleted={fetchQuestions}
         />
       )}
     </main>

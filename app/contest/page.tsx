@@ -6,21 +6,12 @@ import { useRouter } from "next/navigation";
 export default function ContestPage() {
   const router = useRouter();
   const [team, setTeam] = useState<any>(null);
-  <button
-  onClick={() => {
-    localStorage.removeItem("team");
-    router.push("/login");
-  }}
-  className="mt-6 rounded-lg bg-red-500 px-4 py-2"
->
-  Logout
-</button>
 
   useEffect(() => {
     const savedTeam = localStorage.getItem("team");
 
     if (!savedTeam) {
-      router.push("/login");
+      router.push("/Login");
       return;
     }
 
@@ -36,11 +27,22 @@ export default function ContestPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#050816] text-white p-8">
-      <h1 className="text-4xl font-bold">
-        Welcome, <span className="text-cyan-400">{team.team_name}</span>
-      </h1>
+    <main className="min-h-screen bg-[#050816] p-8 text-white">
+      <div className="flex items-center justify-between">
+        <h1 className="text-4xl font-bold">
+          Welcome, <span className="text-cyan-400">{team.team_name}</span>
+        </h1>
+
+        <button
+          onClick={() => {
+            localStorage.removeItem("team");
+            router.push("/Login");
+          }}
+          className="rounded-lg bg-red-500 px-4 py-2 font-semibold hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </div>
     </main>
-    
   );
 }
