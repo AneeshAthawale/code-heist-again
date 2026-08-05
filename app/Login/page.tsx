@@ -1,44 +1,57 @@
 "use client";
-
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [teamName, setTeamName] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+  async function handleLogin(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!teamName.trim()) {
-      alert("Please enter your team name.");
+    if (teamName === "admin" && password === "codeheist2026") {
+      router.push("/components/admin");
       return;
     }
 
-    if (!password.trim()) {
-      alert("Please enter your password.");
+    if (!teamName.trim() || !password.trim()) {
+      alert("Fill all fields.");
       return;
     }
 
-    console.log("Logging in:", teamName);
+    // Supabase login...
 
-    alert(`Welcome, ${teamName}!`);
+
+    const { data, error } = await supabase
+      .from("teams")
+      .select("*")
+      .eq("team_name", teamName)
+      .eq("password", password)
+      .single();
+
+    if (error || !data) {
+      alert("Invalid credentials.");
+      return;
+    }
+
+    localStorage.setItem("team", JSON.stringify(data));
+
+    router.push("/contest");
   }
-
   return (
-    <main className="min-h-screen bg-[#050816] px-6 py-16 text-white">
-      <div className="mx-auto max-w-md">
-        <h1 className="mb-2 text-center text-5xl font-bold">
+    <main className="min-h-screen bg-[#050816] text-white flex items-center justify-center px-6">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8">
+        <h1 className="mb-2 text-4xl font-bold">
           Team <span className="text-cyan-400">Login</span>
         </h1>
 
-        <p className="mb-10 text-center text-gray-400">
-          Sign in to access the contest dashboard.
+        <p className="mb-8 text-gray-400">
+          Enter your team credentials.
         </p>
 
-        <form
-          onSubmit={handleLogin}
-          className="space-y-6 rounded-2xl border border-white/10 bg-white/5 p-8"
-        >
+        <form onSubmit={handleLogin} className="space-y-6">
           <div>
             <label className="mb-2 block text-sm text-gray-300">
               Team Name
@@ -54,7 +67,7 @@ export default function LoginPage() {
 
           <div>
             <label className="mb-2 block text-sm text-gray-300">
-              Team Password
+              Password
             </label>
 
             <input
